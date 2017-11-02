@@ -2,6 +2,40 @@
 
     exports.Server = function(config) {
 
+        if(typeof require !== 'undefined') {
+            var fetch = require('isomorphic-fetch')
+        }
+
+
+        function post(url, data, success, error) {
+            if(typeof $ !== 'undefined') {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: data,
+                    success: success,
+                    error: error,
+                    dataType: 'json'
+                })
+            } else if(typeof fetch !== 'undefined') {
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(function(response) {
+                    return response.json()
+                }).then(function(json) {
+                    success(json)
+                }).catch(function(ex) {
+                    error(ex)
+                })
+            } else {
+                console.error('isomorphic-fetch or jQuery not found')
+            }
+        }
+
 
         function encodeFile(file, callback) {
             var reader  = new FileReader()
@@ -29,7 +63,8 @@
             for(var k in params) {
                 if(typeof params[k] == 'function') {
                     res.callbacks[k] = params[k]
-                } else if(params[k] instanceof File) {
+                } else if(typeof File !== 'undefined' && params[k] instanceof File) {
+                    // browser
                     var file = k
                 } else {
                     res.data[k] = '' + params[k]
@@ -57,22 +92,20 @@
                     },
                     params,
                     function(req) {
-                        $.ajax({
-                            type: 'POST',
-                            url: config.host + '/' + service,
-                            data: req.data,
-                            success: function(res) {
+                        post(
+                            config.host + '/' + service,
+                            req.data,
+                            function(res) {
                                 if(res && res.success) {
                                     req.callbacks.success(res.data)
                                 } else {
                                     req.callbacks.error(res.error)
                                 }
                             },
-                            error: function(res) {
+                            function(res) {
                                 req.callbacks.error('Server not responding')
-                            },
-                            dataType: 'json'
-                        })
+                            }
+                        )
                     }
                 )
             }
