@@ -3,7 +3,7 @@ var fs = require('fs')
 var mime = require('mime')
 
 var host = 'http://localhost:3000'
-var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0YXNrX2lkIjoxLCJyYW5kb21fc2VlZCI6MiwiaWF0IjoxNTA4OTc0NjgzfQ.SCUPPsBqUbzfmgvwrdk2ipNAseVnabcQWjxxXBErNIo'
+var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicmFuZG9tX3NlZWQiOjEsImhpbnRzUmVxdWVzdGVkIjp7ImEiOiJhIiwiYiI6ImIifSwiaWF0IjoxNTA5OTgxNDI2fQ.0TvHW94yWDFr0QuOC9C45JW1QopAZCAtXeTKrFA6yN8'
 var platform_id = 1
 
 var server = new BebrasTools.Server({ host })

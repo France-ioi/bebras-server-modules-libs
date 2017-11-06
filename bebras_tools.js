@@ -135,6 +135,18 @@
             return new AssetsPublisher(options)
         }
 
+
+
+        var TaskInterface = function(options) {
+            this.taskData = createRequest('task', 'taskData', options)
+            this.taskHintData = createRequest('task', 'taskHintData', options)
+            this.gradeAnswer = createRequest('task', 'gradeAnswer', options)
+        }
+
+        this.taskInterface = function(options) {
+            return new TaskInterface(options)
+        }
+
     }
 
 })(typeof exports === 'undefined'? this['BebrasTools'] = {} : exports)

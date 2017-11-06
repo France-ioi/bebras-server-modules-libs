@@ -7,35 +7,13 @@ var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicmFuZG9tX3NlZWQiOj
 var platform_id = 1
 
 var server = new BebrasTools.Server({ host })
-var assetsPublisher = server.assetsPublisher({ platform_id, token})
-var key = 'test_key'
+var taskInterface = server.taskInterface({ platform_id, token})
 
+var answer_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZXN0X2Fuc3dlcl92YWx1ZSI6InRlc3QiLCJpYXQiOjE1MDk5ODg0MDB9.47Pf_YkAS4DHym7YDDqK6URhvWEuoOeCu_09hG_wY3A'
 
-
-
-function assetAdd(callback) {
-    var path = __dirname + '/file.txt'
-    var content = fs.readFileSync(path, { encoding: 'base64'})
-    var content_type = mime.getType(path)
-    console.log('assetsPublisher.add')
-    assetsPublisher.add({
-        key,
-        data: 'data:' + content_type + ';base64,' + content,
-        success: (res) => {
-            console.log('Done')
-            callback && callback()
-        },
-        error: (error) => {
-            console.error(error)
-        }
-    })
-}
-
-
-function assetGetUrl(callback) {
-    console.log('assetsPublisher.getUrl')
-    assetsPublisher.getUrl({
-        key,
+function taskData(callback) {
+    console.log('taskInterface.taskData')
+    taskInterface.taskData({
         success: (res) => {
             console.log('Result', res)
             callback && callback()
@@ -47,12 +25,29 @@ function assetGetUrl(callback) {
 }
 
 
-function assetDelete(callback) {
-    console.log('assetsPublisher.delete')
-    assetsPublisher.delete({
-        key,
+function taskHintData(callback) {
+    console.log('taskInterface.taskHintData')
+    taskInterface.taskHintData({
         success: (res) => {
-            console.log('Done')
+            console.log('Result', res)
+            callback && callback()
+        },
+        error: (error) => {
+            console.error(error)
+        }
+    })
+}
+
+
+function gradeAnswer(callback) {
+    console.log('taskInterface.gradeAnswer')
+    taskInterface.gradeAnswer({
+        answer_token,
+        min_score: 1,
+        max_score: 100,
+        no_score: 0,
+        success: (res) => {
+            console.log('Result', res)
             callback && callback()
         },
         error: (error) => {
@@ -63,11 +58,8 @@ function assetDelete(callback) {
 
 
 
-
-assetAdd(() => {
-    assetGetUrl(() => {
-        assetDelete(() => {
-            assetGetUrl()
-        })
+taskData(() => {
+    taskHintData(() => {
+        gradeAnswer()
     })
 })
