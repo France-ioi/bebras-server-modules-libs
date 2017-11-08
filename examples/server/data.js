@@ -1,14 +1,11 @@
-var BebrasTools = require('../../bebras_tools')
-var fs = require('fs')
-var mime = require('mime')
+var tools = require('../../bebras_tools')
 
 var host = 'http://localhost:3000'
 var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicmFuZG9tX3NlZWQiOjEsImhpbnRzUmVxdWVzdGVkIjp7ImEiOiJhIiwiYiI6ImIifSwiaWF0IjoxNTA5OTgxNDI2fQ.0TvHW94yWDFr0QuOC9C45JW1QopAZCAtXeTKrFA6yN8'
 var platform_id = 1
-
-var server = new BebrasTools.Server({ host })
-var dataStore = server.dataStore({ platform_id, token})
 var key = 'test_key'
+
+var dataStore = tools.connect({ host}).dataStore({ platform_id, token})
 
 
 

@@ -148,16 +148,16 @@
 
     <script type="text/javascript">
         function init() {
-            var server = new BebrasTools.Server({
+            var tools = BebrasTools.connect({
                 host: $('#host').val()
             })
 
-            assetsPublisher = server.assetsPublisher({
+            assetsPublisher = tools.assetsPublisher({
                 platform_id: $('#platform_id').val(),
                 token: $('#token').val()
             })
 
-            dataStore = server.dataStore({
+            dataStore = tools.dataStore({
                 platform_id: $('#platform_id').val(),
                 token: $('#token').val()
             })
@@ -208,7 +208,7 @@
             result.sending()
             assetsPublisher.add({
                 key: $('#asset-action-add-key').val(),
-                data: input.files[0],
+                data: BebrasTools.dataReader(input.files[0]),
                 success: result.success,
                 error: result.error
             })
