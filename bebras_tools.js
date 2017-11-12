@@ -56,7 +56,7 @@
                 } else if(typeof params[k] == 'function') {
                     res.callbacks[k] = params[k]
                 } else {
-                    res.data[k] = params[k].toString()
+                    res.data[k] = '' + params[k]
                 }
             }
 
