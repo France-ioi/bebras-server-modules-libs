@@ -110,16 +110,16 @@
         }
 
         var AssetsPublisher = function(options) {
-            this.add = createRequest('asset', 'add', options)
-            this.getUrl = createRequest('asset', 'url', options)
-            this.delete = createRequest('asset', 'delete', options)
-            this.empty = createRequest('asset', 'empty', options)
+            this.add = createRequest('assets', 'add', options)
+            this.getUrl = createRequest('assets', 'url', options)
+            this.delete = createRequest('assets', 'delete', options)
+            this.empty = createRequest('assets', 'empty', options)
         }
 
         var TaskInterface = function(options) {
-            this.taskData = createRequest('task', 'taskData', options)
-            this.taskHintData = createRequest('task', 'taskHintData', options)
-            this.gradeAnswer = createRequest('task', 'gradeAnswer', options)
+            this.taskData = createRequest('tasks', 'taskData', options)
+            this.taskHintData = createRequest('tasks', 'taskHintData', options)
+            this.gradeAnswer = createRequest('tasks', 'gradeAnswer', options)
         }
 
 
