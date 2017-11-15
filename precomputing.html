@@ -11,12 +11,13 @@
     crossorigin="anonymous"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
     <script src="bebras_tools.js" type="text/javascript"></script>
+    <script src="jwt.js" type="text/javascript"></script>
 </head>
 <body>
     <div class="container">
-
-
         <div class="form-group">
             <label>Server host</label>
             <input type="text" class="form-control" id="host" value="http://localhost:3000">
@@ -27,7 +28,7 @@
         </div>
         <div class="form-group">
             <label>Task id</label>
-            <input type="text" class="form-control" id="task_id" value="1">
+            <input type="text" class="form-control" id="task_id" value="test-server-modules">
         </div>
         <div class="form-group">
             <label for="random_seed_min">Task random_seed min</label>
@@ -45,10 +46,6 @@
 
         <br><br>
 
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 0" id="progress"></div>
-        </div>
-
         <div id="log"></div>
 
     </div>
@@ -57,32 +54,39 @@
 
     <script type="text/javascript">
 
-        function progress(amount, total) {
-            $('#progress')
-                .css({ width: Math.round(100*amount/total) + '%'})
-                .text(amount + ' of ' + total)
+        function callTools(task_interface, token, callback) {
+            task_interface.taskData({
+                token: token,
+                success: callback,
+                error: callback
+            })
         }
 
 
         function run() {
-            var min = parseInt($('random_seed_min').val(), 10)
-            var max = parseInt($('random_seed_max').val(), 10)
-            var task_id = parseInt($('task_id').val(), 10)
+            var min = parseInt($('#random_seed_min').val(), 10)
+            var max = parseInt($('#random_seed_max').val(), 10)
+            var task_id = $('#task_id').val()
+            var key = $('#key').val()
 
-            var dataStore = tools.connect({
+            var task_interface = BebrasTools.connect({
                 host: $('#host').val()
-            }).dataStore({
-                platform_id: $('platform_id').val()
+            }).taskInterface({
+                platform_id: $('#platform_id').val()
             })
 
             for(var i=min; i<=max; i++) {
+                var token = signJWT({
+                    id: task_id,
+                    random_seed: i
+                }, key)
+                callTools(task_interface, token, function(res) {
+                    $('#log').append('<pre>' + JSON.stringify(res, 4) + '</pre>')
+                })
             }
         }
 
-
-        $('#run').click(function() {
-            $(this).attr('disabled', true)
-        })
+        $('#run').click(run)
     </script>
 </body>
 </html>
