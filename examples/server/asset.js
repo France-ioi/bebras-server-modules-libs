@@ -1,11 +1,17 @@
 var tools = require('../../bebras_tools')
+var jwt = require('jsonwebtoken')
 
-var host = 'http://localhost:3000'
-var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicmFuZG9tX3NlZWQiOjEsImhpbnRzUmVxdWVzdGVkIjp7ImEiOiJhIiwiYiI6ImIifSwiaWF0IjoxNTA5OTgxNDI2fQ.0TvHW94yWDFr0QuOC9C45JW1QopAZCAtXeTKrFA6yN8'
-var platform_id = 1
+var assetsPublisher = tools.connect({
+    host: 'http://localhost:3000'
+}).assetsPublisher({
+    platform_id: 1,
+    token: jwt.sign({
+        id: 'test-server-modules',
+        random_seed: 1
+    }, 'buddy')
+})
+
 var key = 'test_key'
-
-var assetsPublisher = tools.connect({ host}).assetsPublisher({ platform_id, token})
 
 
 function assetAdd(callback) {
