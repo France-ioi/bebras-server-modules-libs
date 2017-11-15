@@ -75,6 +75,7 @@
                 platform_id: $('#platform_id').val()
             })
 
+            $('#log').empty()
             for(var i=min; i<=max; i++) {
                 var token = signJWT({
                     id: task_id,
