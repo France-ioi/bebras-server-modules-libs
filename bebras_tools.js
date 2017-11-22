@@ -76,8 +76,7 @@
                 prepareRequestParams(
                     {
                         action: action,
-                        token: params.token || options.token,
-                        platform_id: params.platform_id || options.platform_id
+                        task: params.task || options.task
                     },
                     params,
                     function(req) {

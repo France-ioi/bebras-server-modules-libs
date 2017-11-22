@@ -4,10 +4,13 @@ var jwt = require('jsonwebtoken')
 var dataStore = tools.connect({
     host: 'http://localhost:3000'
 }).dataStore({
-    platform_id: 1,
-    token: jwt.sign({
-        id: 'test-server-modules',
-        random_seed: 1
+    task: jwt.sign({
+        platformName: 'test',
+        itemUrl: 'http://localhost?taskID=test-server-modules',
+        randomSeed: 0,
+        hints_requested: [
+            'test'
+        ]
     }, 'buddy')
 })
 

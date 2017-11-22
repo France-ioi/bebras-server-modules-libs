@@ -23,12 +23,12 @@
             <input type="text" class="form-control" id="host" value="http://localhost:3000">
         </div>
         <div class="form-group">
-            <label>Platform ID</label>
-            <input type="text" class="form-control" id="platform_id" value="1">
+            <label>Platform Name</label>
+            <input type="text" class="form-control" id="platform_name" value="test">
         </div>
         <div class="form-group">
-            <label>Task id</label>
-            <input type="text" class="form-control" id="task_id" value="test-server-modules">
+            <label for="task_id">Task itemUrl</label>
+            <input type="text" class="form-control" id="task_url" value="http://localhost?taskID=test-server-modules">
         </div>
         <div class="form-group">
             <label for="random_seed_min">Task random_seed min</label>
@@ -54,9 +54,9 @@
 
     <script type="text/javascript">
 
-        function callTools(task_interface, token, callback) {
+        function callTools(task_interface, task, callback) {
             task_interface.taskData({
-                token: token,
+                task: task,
                 success: callback,
                 error: callback
             })
@@ -66,22 +66,22 @@
         function run() {
             var min = parseInt($('#random_seed_min').val(), 10)
             var max = parseInt($('#random_seed_max').val(), 10)
-            var task_id = $('#task_id').val()
+            var task_url = $('#task_url').val()
+            var platform_name = $('#platform_name').val()
             var key = $('#key').val()
 
             var task_interface = BebrasTools.connect({
                 host: $('#host').val()
-            }).taskInterface({
-                platform_id: $('#platform_id').val()
-            })
+            }).taskInterface()
 
             $('#log').empty()
             for(var i=min; i<=max; i++) {
-                var token = signJWT({
-                    id: task_id,
-                    random_seed: i
+                var task = signJWT({
+                    itemUrl: task_url,
+                    randomSeed: i,
+                    platformName: platform_name
                 }, key)
-                callTools(task_interface, token, function(res) {
+                callTools(task_interface, task, function(res) {
                     $('#log').append('<pre>' + JSON.stringify(res, 4) + '</pre>')
                 })
             }

@@ -4,20 +4,18 @@
             host: $('#host').val()
         })
 
-
         var token = signJWT({
-            id: $('#task_id').val(),
-            random_seed: $('#random_seed').val(),
+            platformName: $('#platform_name').val(),
+            itemUrl: $('#task_url').val(),
+            randomSeed: $('#task_random_seed').val(),
         }, $('#token_key').val())
 
         assetsPublisher = tools.assetsPublisher({
-            platform_id: $('#platform_id').val(),
-            token: token
+            task: token
         })
 
         dataStore = tools.dataStore({
-            platform_id: $('#platform_id').val(),
-            token: token
+            task: token
         })
     }
 

@@ -4,17 +4,15 @@ var jwt = require('jsonwebtoken')
 var taskInterface = tools.connect({
     host: 'http://localhost:3000'
 }).taskInterface({
-    platform_id: 1,
-    token: jwt.sign({
-        id: 'test-server-modules',
-        random_seed: 1,
+    task: jwt.sign({
+        platformName: 'test',
+        itemUrl: 'http://localhost?taskID=test-server-modules',
+        randomSeed: 0,
         hints_requested: [
             'test'
         ]
     }, 'buddy')
 })
-
-var key = 'test_key'
 
 
 function taskData(callback) {
@@ -47,8 +45,14 @@ function taskHintData(callback) {
 
 function gradeAnswer(callback) {
     console.log('taskInterface.gradeAnswer')
+    var answer = {
+        platformName: 'test',
+        itemUrl: 'http://localhost?taskID=test-server-modules',
+        randomSeed: 0,
+        sAnswer: 'answer'
+    }
     taskInterface.gradeAnswer({
-        answer_token: jwt.sign('answer_string', 'buddy'),
+        answer: jwt.sign(answer, 'buddy'),
         min_score: 1,
         max_score: 100,
         no_score: 0,
