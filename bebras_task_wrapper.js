@@ -2,17 +2,27 @@ function BebrasTaskWrapper(task, options) {
 
     var taskInterface = BebrasTools.connect({
         host: options.host
-    }).taskInterface({
-        platform_id: options.platform_id
-    })
+    }).taskInterface()
 
 
     var task_token = {
 
-        error_delay: 1000,
+        error_delay: 2000,
         token: null,
         timeout: null,
         callbacks: {},
+
+
+        init: function(callback) {
+            var query = document.location.search.replace(/(^\?)/,'').split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
+            if(query.sToken) {
+                this.token = query.sToken
+                //console.log(this.token)
+                return callback(this.token)
+            }
+            console.error('sToken not found in query string')
+        },
+
 
         get: function(success, error) {
             this.reset()
@@ -25,8 +35,10 @@ function BebrasTaskWrapper(task, options) {
             }
             this.timeout = setTimeout((function() {
                 this.callbacks.error && this.callbacks.error('Error, task token was not received')
+                this.reset()
             }).bind(this), this.error_delay)
         },
+
 
         set: function(token) {
             this.callbacks.success && this.callbacks.success(token)
@@ -34,10 +46,12 @@ function BebrasTaskWrapper(task, options) {
             this.reset()
         },
 
+
         empty: function() {
             this.token = null
             this.reset()
         },
+
 
         reset: function() {
             clearTimeout(this.timeout)
@@ -50,7 +64,7 @@ function BebrasTaskWrapper(task, options) {
 
     function loadHint(token) {
         taskInterface.taskHintData({
-            token: token,
+            task: token,
             success: function(res) {
                 task.onTaskHintData && task.onTaskHintData(res)
             },
@@ -63,24 +77,24 @@ function BebrasTaskWrapper(task, options) {
 
 
     task.load = function(views, success, error) {
-        task_token.get(
-            function(token) {
-                task.onLoad && task.onLoad()
+        task_token.init(function(token) {
+            if(token) {
+                task.onLoad && task.onLoad(views, success)
                 taskInterface.taskData({
-                    token: token,
+                    task: token,
                     success: function(res) {
                         task.onTaskData && task.onTaskData(res)
-                        success && success()
+                        //success && success()
                     },
                     error: function(msg) {
-                        error && error(msg)
+                        console.error(msg)
+                        error && error()
                     }
                 })
-            },
-            function(msg) {
-                error && error(msg)
+            } else {
+                error && error()
             }
-        )
+        })
     }
 
 
@@ -120,13 +134,13 @@ function BebrasTaskWrapper(task, options) {
             function(task_token) {
                 platform.getTaskParams(null, null, function(taskParams) {
                     taskInterface.gradeAnswer({
-                        token: task_token,
-                        answer_token: answer_token,
+                        task: task_token,
+                        answer: answer_token,
                         min_score: taskParams.minScore,
                         max_score: taskParams.maxScore,
                         no_score: taskParams.noScore,
                         success: function(res) {
-                            callback(res.score, res.message)
+                            callback(res.score, res.message, res.token)
                         },
                         error: function(msg) {
                             console.error(msg)

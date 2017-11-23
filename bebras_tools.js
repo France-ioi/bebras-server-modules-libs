@@ -72,6 +72,7 @@
 
 
         function createRequest(service, action, options) {
+            options = options || {}
             return function(params) {
                 prepareRequestParams(
                     {
