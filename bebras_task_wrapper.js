@@ -157,4 +157,8 @@ function BebrasTaskWrapper(task, options) {
     }
 
 
+    task.getLevelGrade = function(answer, answerToken, callback, gradedLevel) {
+        task.gradeAnswer(answer, answerToken, callback);
+    }
+
 }
