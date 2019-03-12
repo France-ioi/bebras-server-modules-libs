@@ -1,5 +1,9 @@
 (function(task) {
 
+    $('solution').hide();
+    $('#solution').hide();
+    $('.grader').hide();
+
     // grade
     function useGraderData(url, answer, callback) {
         if(window.QuizzeGrader && window.QuizzeGrader.data) {
@@ -84,8 +88,9 @@
                 callback();
             };
 
-            task.hackShowViews = function(views) {
+            task.showViews = function(views) {
                 q.toggleSolutions(!!views.solution);
+                $('#solution').toggle(!!views.solution);
             }
 
             task.gradeAnswer = function(answer, answer_token, callback) {
