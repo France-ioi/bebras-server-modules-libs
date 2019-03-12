@@ -1,5 +1,11 @@
 function QuizzeUI(params) {
 
+
+
+
+
+
+
     // sys utils
     function error(msg) {
         console.error('Quizze error: ' + msg);
@@ -46,6 +52,27 @@ function QuizzeUI(params) {
         return false;
     }
 
+
+    // apply desing
+    var answer_tpl =
+        '<div class="answer-block">\
+            <span class="answer-label">%%LABEL%%</span>\
+            <span class="answer-code">%%CODE%%</span>\
+        </div>';
+
+    params.parent.find('question').each(function() {
+        var question = $(this);
+        var answers = question.find('answer');
+        answers.each(function(i) {
+            var answer = $(this);
+            var html = answer_tpl;
+            html = html
+                .replace('%%LABEL%%', answer.html())
+                .replace('%%CODE%%', String.fromCharCode(i + 65));
+            answer.html(html)
+        });
+        answers.wrapAll('<div class="answers"></div>');
+    })
 
 
     // questions types
