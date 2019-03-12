@@ -102,7 +102,7 @@
                 if(token) {
                     useGraderUrl(json.graderUrl, token, answer, onGrade);
                 } else if(json.graderUrl) {
-                    useGraderData(json.graderData, answer, onGrade);
+                    useGraderData('grader_data.js', answer, onGrade);
                 }
             };
             taskLoadCallback();
