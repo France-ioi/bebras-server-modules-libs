@@ -102,12 +102,9 @@ function QuizzeUI(params) {
                 }
             },
 
-            showMistakes: function(mistakes) {
-                if(mistakes === null) {
-                    parent.find('answer').removeClass('mistake');
-                } else {
-                    parent.find('answer.selected').addClass('mistake');
-                }
+            showResult: function(mistakes) {
+                parent.find('answer').removeClass('correct mistake');
+                parent.find('answer.selected').addClass(mistakes === null ? 'correct' : 'mistake');
             }
         }
 
@@ -145,14 +142,13 @@ function QuizzeUI(params) {
                 });
             },
 
-            showMistakes: function(mistakes) {
-                if(mistakes === null) {
-                    parent.find('answer').removeClass('mistake');
-                } else {
-                    for(var i=0; i<mistakes.length; i++) {
-                        parent.find('answer[answer-index=' + mistakes[i] + ']').addClass('mistake');
-                    }
-                }
+            showResult: function(mistakes) {
+                parent.find('answer').removeClass('correct mistake');
+                parent.find('answer.selected').each(function() {
+                    var el = $(this)
+                    var idx = parseInt(el.attr('answer-index'), 10);
+                    el.addClass(mistakes.indexOf(idx) === -1 ? 'correct' : 'mistake')
+                })
             }
         }
 
@@ -188,12 +184,9 @@ function QuizzeUI(params) {
                 input.val(value)
             },
 
-            showMistakes: function(mistakes) {
-                if(mistakes === null) {
-                    parent.find('answer').removeClass('mistake');
-                } else {
-                    parent.find('answer').addClass('mistake');
-                }
+            showResult: function(mistakes) {
+                parent.find('answer').removeClass('correct mistake');
+                parent.find('answer').addClass(mistakes === null ? 'correct' : 'mistake');
             }
         }
 
@@ -262,9 +255,9 @@ function QuizzeUI(params) {
             }
         },
 
-        showMistakes: function(mistakes) {
+        showResult: function(mistakes) {
             for(var i=0; i<questions.length; i++) {
-                questions[i].showMistakes(mistakes[i]);
+                questions[i].showResult(mistakes[i]);
             }
         }
 

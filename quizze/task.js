@@ -95,7 +95,7 @@
                         taskParams.minScore + Math.round(d * result.score),
                         taskParams.noScore || 0
                     );
-                    q.showMistakes(result.mistakes);
+                    q.showResult(result.mistakes);
                     callback(final_score, 'Your score is ' + final_score, null);
                 }
                 var token = task_token.get()
