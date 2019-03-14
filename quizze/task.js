@@ -144,6 +144,18 @@ task.load = function(views, success) {
             callback();
         };
 
+
+
+        function displayScore(score, max_score) {
+            var msg = 'Score <span class="value">' + score + '</span><span class="max-value">/' + max_score + '</span>';
+            if($('#score').length == 0) {
+                var div = '<div id="score"></div>';
+                $('.taskContent').first().append(div);
+            }
+            $('#score').html(msg);
+        }
+
+
         task.gradeAnswer = function(answer, answer_token, callback) {
             answer = JSON.parse(answer);
             function onGrade(result) {
@@ -153,6 +165,7 @@ task.load = function(views, success) {
                     taskParams.noScore || 0
                 );
                 q.showResult(result.mistakes);
+                displayScore(final_score, taskParams.maxScore);
                 callback(final_score, 'Your score is ' + final_score, null);
             }
             var token = task_token.get()
