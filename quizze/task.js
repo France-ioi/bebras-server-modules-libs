@@ -194,7 +194,7 @@ task.load = function(views, success) {
         btn.on('click', function() {
             platform.validate('done');
         });
-        $('.taskContent').first().append(btn);
+        btn.insertAfter($('.taskContent'));
 
         success();
     });
